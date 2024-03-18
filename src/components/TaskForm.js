@@ -7,17 +7,36 @@ import { generateId } from "../utils/idGenerator";
 const TaskForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [titleError, setTitleError] = useState(""); // State for title validation error
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validate title
+    if (!title.trim()) {
+      setTitleError("Title is required");
+      return;
+    }
+
+    // Reset title validation error
+    setTitleError("");
+
+    // Generate a unique ID for the new task
+    const taskId = generateId();
+
+    // Create the new task object
     const newTask = {
-      id: generateId(),
+      id: taskId,
       title,
       description,
       completed: false,
     };
+
+    // Dispatch the addTask action to Redux
     dispatch(addTask(newTask));
+
+    // Reset form fields
     setTitle("");
     setDescription("");
 
@@ -42,6 +61,10 @@ const TaskForm = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 style={{ fontSize: "1.5rem" }}
               />
+              {titleError && (
+                <Form.Text className="text-danger">{titleError}</Form.Text>
+              )}{" "}
+              {/* Display title validation error message */}
             </Form.Group>
           </Col>
         </Row>
