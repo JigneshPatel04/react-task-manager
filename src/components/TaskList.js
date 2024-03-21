@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteTask, setTasks } from "../actions/taskActions";
-import { ListGroup, Button } from "react-bootstrap";
+import { ListGroup, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const TaskList = () => {
@@ -30,22 +30,34 @@ const TaskList = () => {
   return (
     <div>
       <h2>Task List</h2>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h5>Task</h5>
-        <h5>Status</h5>
-        <h5>Action</h5>
-      </div>
+      <Row className="mb-3">
+        <Col xs={8}>
+          <h5>Task</h5>
+        </Col>
+        <Col>
+          <h5>Status</h5>
+        </Col>
+        <Col>
+          <h5>Action</h5>
+        </Col>
+      </Row>
       <ListGroup>
         {tasks.map((task) => (
           <ListGroup.Item
             key={task.id}
             className="d-flex justify-content-between align-items-center"
           >
-            <Link to={`/task/${task.id}`}>{task.title}</Link>
-            <div>{task.status}</div>
-            <Button variant="danger" onClick={() => handleDelete(task.id)}>
-              Delete
-            </Button>
+            <Col xs={8}>
+              <Link to={`/task/${task.id}`}>{task.title}</Link>
+            </Col>
+            <Col>
+              <div>{task.status}</div>
+            </Col>
+            <Col>
+              <Button variant="danger" onClick={() => handleDelete(task.id)}>
+                Delete
+              </Button>
+            </Col>
           </ListGroup.Item>
         ))}
       </ListGroup>
