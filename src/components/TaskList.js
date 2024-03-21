@@ -15,22 +15,26 @@ const TaskList = () => {
     }
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     localStorage.removeItem("tasks"); // Clear tasks from local storage when unmounting
-  //   };
-  // }, []);
-
   const handleDelete = (id) => {
-    dispatch(deleteTask(id));
-    // Update local storage after deleting task
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+    if (confirmed) {
+      dispatch(deleteTask(id));
+      // Update local storage after deleting task
+      const updatedTasks = tasks.filter((task) => task.id !== id);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    }
   };
 
   return (
     <div>
       <h2>Task List</h2>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5>Task</h5>
+        <h5>Status</h5>
+        <h5>Action</h5>
+      </div>
       <ListGroup>
         {tasks.map((task) => (
           <ListGroup.Item
@@ -38,6 +42,7 @@ const TaskList = () => {
             className="d-flex justify-content-between align-items-center"
           >
             <Link to={`/task/${task.id}`}>{task.title}</Link>
+            <div>{task.status}</div>
             <Button variant="danger" onClick={() => handleDelete(task.id)}>
               Delete
             </Button>

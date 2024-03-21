@@ -11,6 +11,7 @@ const TaskDetails = () => {
   const task = tasks.find((task) => task.id === parseInt(id));
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const TaskDetails = () => {
     if (task) {
       setTitle(task.title);
       setDescription(task.description);
+      setStatus(task.status);
     } else {
       navigate("/");
     }
@@ -29,6 +31,7 @@ const TaskDetails = () => {
       ...task,
       title,
       description,
+      status,
     };
     dispatch(updateTask(updatedTask));
     // Update local storage after updating task
@@ -37,6 +40,10 @@ const TaskDetails = () => {
     );
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     navigate("/");
+  };
+
+  const handleCancel = () => {
+    navigate("/"); // Redirect to the task list
   };
 
   return (
@@ -62,9 +69,27 @@ const TaskDetails = () => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Update Task
-            </Button>
+            <Form.Group controlId="formStatus">
+              <Form.Label>Status</Form.Label>
+              <Form.Control
+                as="select"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Canceled">Canceled</option>
+              </Form.Control>
+            </Form.Group>
+            <div style={{ marginTop: "1rem" }}>
+              <Button variant="primary" type="submit">
+                Update Task
+              </Button>{" "}
+              <Button variant="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
           </Form>
         </div>
       )}
